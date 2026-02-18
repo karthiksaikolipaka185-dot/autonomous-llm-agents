@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: auth-backend-container
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb+srv://Capstone_user:Karthiksai9642@cluster0.lyg8jeh.mongodb.net/capstone_agents?appName=Cluster0
+      - JWT_SECRET=mysecrettoken123
+    restart: always
