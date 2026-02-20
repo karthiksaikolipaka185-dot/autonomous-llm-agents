@@ -18,8 +18,10 @@ pipeline {
 
         stage('Deploy Container') {
             steps {
+                echo 'Stopping old containers...'
+                bat 'docker compose down'
                 echo 'Running Docker Container...'
-                bat 'docker compose up -d'
+                bat 'docker compose up -d --build'
             }
         }
     }
