@@ -18,9 +18,9 @@ pipeline {
 
         stage('Deploy Container') {
             steps {
-                echo 'Stopping old containers...'
-                bat 'docker compose down'
-                echo 'Running Docker Container...'
+                echo 'Removing old container if exists...'
+                bat 'docker rm -f auth-backend-container || exit 0'
+                echo 'Starting fresh container...'
                 bat 'docker compose up -d --build'
             }
         }
