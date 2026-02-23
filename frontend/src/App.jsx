@@ -74,7 +74,13 @@ const Navbar = () => {
                             <button onClick={onLogout} style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '0.9rem' }}>Logout</button>
                         </div>
                     </>
-                ) : null}
+                ) : (
+                    <>
+                        <Link to="/" style={{ color: location.pathname === '/' ? '#fff' : 'rgba(255,255,255,0.7)', textDecoration: 'none', fontSize: '0.9rem' }}>Home</Link>
+                        <Link to="/login" style={{ color: location.pathname === '/login' ? '#fff' : 'rgba(255,255,255,0.7)', textDecoration: 'none', fontSize: '0.9rem' }}>Login</Link>
+                        <Link to="/register" className="neon-button" style={{ textDecoration: 'none', fontSize: '0.9rem', padding: '0.5rem 1.2rem' }}>Register</Link>
+                    </>
+                )}
             </div>
         </nav>
     );
@@ -83,13 +89,16 @@ const Navbar = () => {
 const MainApp = () => {
     const { user } = useContext(AuthContext);
     const [planData, setPlanData] = useState(null);
+    const location = useLocation();
+
+    const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
     return (
         <div className="App">
             <div className="bg-gradient"></div>
-            {user && <Navbar />}
+            {!isAuthPage && <Navbar />}
 
-            <div style={{ paddingTop: '100px', minHeight: '100vh' }}>
+            <div style={{ paddingTop: isAuthPage ? '2rem' : '100px', minHeight: '100vh' }}>
                 <Routes>
                     <Route path="/" element={<Hero onPlanGenerated={(data) => {
                         setPlanData(data);
@@ -120,9 +129,11 @@ const MainApp = () => {
                 </Routes>
             </div>
 
-            <footer style={{ textAlign: 'center', padding: '2rem', color: '#666', fontSize: '0.8rem' }}>
-                <p>&copy; 2026 AI Travel Planner. Built for Explorers.</p>
-            </footer>
+            {!isAuthPage && (
+                <footer style={{ textAlign: 'center', padding: '2rem', color: '#666', fontSize: '0.8rem' }}>
+                    <p>&copy; 2026 AI Travel Planner. Built for Explorers.</p>
+                </footer>
+            )}
         </div>
     );
 };

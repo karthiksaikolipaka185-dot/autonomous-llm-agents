@@ -1,28 +1,34 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
+/**
+ * @desc    Middleware to protect routes - Verify Bearer token
+ */
 const protect = async (req, res, next) => {
     let token;
 
-    if (req.cookies.token) {
+    // Read token from cookies
+    if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
     }
 
     if (!token) {
-        return res.status(401).json({ message: 'Not authorized, no token' });
+        return res.status(401).json({ message: 'Not authorized' });
     }
 
     try {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Get user from the token
-        req.user = await User.findById(decoded.id).select('-password');
+        // Attach user data to request
+        req.user = {
+            id: decoded.id,
+            role: decoded.role
+        };
 
         next();
     } catch (error) {
         console.error(error);
-        res.status(401).json({ message: 'Not authorized, invalid token' });
+        return res.status(401).json({ message: 'Not authorized' });
     }
 };
 
