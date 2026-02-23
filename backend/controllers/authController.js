@@ -1,7 +1,11 @@
 const User = require('../models/User');
-
 const jwt = require('jsonwebtoken');
 
+/**
+ * @desc    Register a new user
+ * @route   POST /api/auth/register
+ * @access  Public
+ */
 exports.registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -24,7 +28,6 @@ exports.registerUser = async (req, res) => {
             password
         });
 
-        // Response (No JWT yet)
         if (user) {
             res.status(201).json({
                 success: true,
@@ -38,13 +41,18 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+/**
+ * @desc    Login user & get token
+ * @route   POST /api/auth/login
+ * @access  Public
+ */
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Validate
+        // Validation
         if (!email || !password) {
-            return res.status(400).json({ message: "Please enter all fields" });
+            return res.status(400).json({ message: "Please provide an email and password" });
         }
 
         // Check for user
@@ -53,13 +61,13 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // Check password
+        // Check if password matches
         const isMatch = await user.matchPassword(password);
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // Generate Token
+        // Create token
         const token = jwt.sign(
             { id: user._id, role: user.role },
             process.env.JWT_SECRET,
@@ -70,7 +78,7 @@ exports.loginUser = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: false, // Set to true in production with HTTPS
-            sameSite: 'lax',
+            sameSite: 'strict',
             maxAge: 60 * 60 * 1000 // 1 hour
         });
 
@@ -85,24 +93,3 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-exports.getUser = async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json(user);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-};
-
-exports.logoutUser = (req, res) => {
-    res.cookie('token', '', {
-        httpOnly: true,
-        expires: new Date(0)
-    });
-
-    res.status(200).json({
-        success: true,
-        message: "Logged out successfully"
-    });
-};

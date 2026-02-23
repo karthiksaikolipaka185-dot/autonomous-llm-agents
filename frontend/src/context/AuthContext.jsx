@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/protected');
+            const res = await axios.get('/api/protected');
             setIsAuthenticated(true);
             setUser(res.data.user);
         } catch (err) {
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         setError(null);
         try {
-            await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
+            await axios.post('/api/auth/register', { name, email, password });
             return true;
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         setError(null);
         try {
-            await axios.post('http://localhost:5000/api/auth/login', { email, password });
+            await axios.post('/api/auth/login', { email, password });
             await checkAuth(); // Re-check auth to set user and state
             return true;
         } catch (err) {
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post('http://localhost:5000/api/auth/logout');
+            await axios.post('/api/auth/logout');
             setIsAuthenticated(false);
             setUser(null);
             navigate('/login');
