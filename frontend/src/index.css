@@ -7,7 +7,7 @@
   /* Neon Green */
   --accent-color: #ff0055;
   /* Hot Pink */
-  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-bg: rgba(255, 255, 255, 0.06);
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
@@ -99,7 +99,7 @@ h4 {
 }
 
 .glass-panel:hover {
-  border-color: rgba(124, 58, 237, 0.3);
+  border-color: rgba(124, 58, 237, 0.4);
   box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -110,7 +110,7 @@ h4 {
   border: 1px solid var(--primary-color);
   padding: 0.8rem 1.5rem;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 601;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -161,7 +161,7 @@ h4 {
 
 .input-field:focus {
   border-color: var(--primary-color);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.09);
 }
 
 /* Utilities */
@@ -172,7 +172,7 @@ h4 {
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   50% {
@@ -182,7 +182,7 @@ h4 {
 
   100% {
     transform: scale(0.95);
-    opacity: 0.8;
+    opacity: 0.9;
   }
 }
 
