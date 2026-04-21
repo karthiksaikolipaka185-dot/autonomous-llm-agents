@@ -29,7 +29,7 @@ async function testLogin() {
         if (response.data.success && response.data.token) {
             console.log('✅ Login Successful - Token received');
         } else {
-            console.log('❌ Login Failed - Token missing');
+            console.log('❌ Login Failed - Token is missing');
         }
     } catch (error) {
         console.error('❌ Error during login test:');

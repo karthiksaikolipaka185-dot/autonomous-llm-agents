@@ -16,7 +16,7 @@ const testCases = [
     {
         name: "Unstructured Input - Paris (Mocked parsing)",
         input: {
-            text: "Plan a trip to Paris for 5 days with budget 1500 Euros"
+            text: "Plan a trip to Paris for 5 days with the budget 1500 Euros"
         }
     }
 ];
@@ -50,7 +50,7 @@ const runTests = async () => {
             console.log("Review Output:", JSON.stringify(review, null, 2));
 
         } else {
-            console.log("Skipping downstream agents (Analysis not ready)");
+            console.log("Skipping the downstream agents (Analysis not ready)");
         }
     }
 };
