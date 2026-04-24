@@ -68,8 +68,8 @@ const Navbar = () => {
                                 fontSize: '0.9rem',
                                 color: '#000',
                                 cursor: 'pointer'
-                            }} title={user.name}>
-                                {user.name.charAt(0).toUpperCase()}
+                            }} title={user?.name || 'User'}>
+                                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                             </div>
                             <button onClick={onLogout} style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '0.9rem' }}>Logout</button>
                         </div>
@@ -89,7 +89,9 @@ const Navbar = () => {
 const MainApp = () => {
     const { user } = useContext(AuthContext);
     const [planData, setPlanData] = useState(null);
+    const [isGenerating, setIsGenerating] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
@@ -100,15 +102,20 @@ const MainApp = () => {
 
             <div style={{ paddingTop: isAuthPage ? '2rem' : '100px', minHeight: '100vh' }}>
                 <Routes>
-                    <Route path="/" element={<Hero onPlanGenerated={(data) => {
+                    <Route path="/" element={<Hero onGenerateStart={() => {
+                        setIsGenerating(true);
+                        setPlanData(null);
+                        navigate('/dashboard');
+                    }} onPlanGenerated={(data) => {
                         setPlanData(data);
+                        setIsGenerating(false);
                     }} />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
-                            {planData ? (
-                                <Dashboard planData={planData} onBack={() => setPlanData(null)} />
+                            {planData || isGenerating ? (
+                                <Dashboard planData={planData} onBack={() => { setPlanData(null); setIsGenerating(false); }} />
                             ) : (
                                 <div style={{ textAlign: 'center', color: '#fff', marginTop: '2rem' }}>
                                     <h2>Your Dashboard</h2>

@@ -114,15 +114,15 @@ const Dashboard = ({ planData, onBack }) => {
             timer = setTimeout(() => { setActiveStage(2); setExpandedStage(2); }, 3000);
         } else if (activeStage === 2) {
             timer = setTimeout(() => { setActiveStage(3); setExpandedStage(3); }, 4000);
-        } else if (activeStage === 3) {
+        } else if (activeStage === 3 && planData) {
             timer = setTimeout(() => {
                 setActiveStage(4);
                 setExpandedStage(null);
                 setTimeout(() => setShowResults(true), 1000);
-            }, 3000);
+            }, 2000);
         }
         return () => clearTimeout(timer);
-    }, [activeStage]);
+    }, [activeStage, planData]);
 
     const toggleExpand = (id) => {
         setExpandedStage(expandedStage === id ? null : id);
@@ -135,11 +135,12 @@ const Dashboard = ({ planData, onBack }) => {
 
     // Calculate dynamic costs from execution results
     const calculateCost = (category) => {
-        const items = executionResults.filter(item =>
-            item.description.toLowerCase().includes(category) ||
-            item.result.toLowerCase().includes(category)
-        );
-        const total = items.reduce((sum, item) => sum + (item.cost || 0), 0);
+        const items = executionResults.filter(item => {
+            const desc = String(item?.description || '').toLowerCase();
+            const res = String(item?.result || '').toLowerCase();
+            return desc.includes(category) || res.includes(category);
+        });
+        const total = items.reduce((sum, item) => sum + (Number(item?.cost) || 0), 0);
         return total > 0 ? `₹${total.toLocaleString()}` : "Calculating...";
     };
 
@@ -151,16 +152,17 @@ const Dashboard = ({ planData, onBack }) => {
                 : (finalItinerary ? `₹${finalItinerary.total_estimated_cost}` : budget),
             duration: finalItinerary?.duration ? `${finalItinerary.duration} Days` : `${days} Days`
         },
-        // Transform "Day 1: Arrive..." strings into objects for TripResults
+        // Transform "Day 1: Arrive..." strings into objects for TripResults safely
         itinerary: finalItinerary?.itinerary_steps?.map((stepStr, i) => {
-            const parts = stepStr.split(':');
-            const title = parts.length > 1 ? parts.slice(1).join(':').trim() : stepStr;
+            const safeStepStr = typeof stepStr === 'string' ? stepStr : JSON.stringify(stepStr || '');
+            const parts = safeStepStr.split(':');
+            const title = parts.length > 1 ? parts.slice(1).join(':').trim() : safeStepStr;
             return {
                 day: i + 1,
                 title: title,
                 activities: [
                     "Check Agent Logs for details",
-                    ...(executionResults.slice(i * 2, (i * 2) + 2).map(e => e.result)) // Map some execution results to days roughly
+                    ...(executionResults.slice(i * 2, (i * 2) + 2).map(e => String(e?.result || '')))
                 ]
             };
         }) || [],

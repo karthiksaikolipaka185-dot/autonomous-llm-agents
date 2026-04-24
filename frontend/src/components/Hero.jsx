@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Calendar, DollarSign, Users, Sparkles, ArrowRight, Loader } from 'lucide-react';
 import axios from 'axios';
 
-const Hero = ({ onPlanGenerated }) => {
+const Hero = ({ onGenerateStart, onPlanGenerated }) => {
     const [status, setStatus] = useState('idle'); // idle, loading, error
     const [inputs, setInputs] = useState({
         destination: '',
@@ -21,6 +21,7 @@ const Hero = ({ onPlanGenerated }) => {
 
     const handleGenerate = async () => {
         setStatus('loading');
+        if (onGenerateStart) onGenerateStart();
         try {
             // Prioritize main text input if structured inputs are empty, 
             // otherwise use structured inputs.

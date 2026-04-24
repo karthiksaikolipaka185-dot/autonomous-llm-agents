@@ -19,11 +19,13 @@ const protect = async (req, res, next) => {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Attach user data to request
-        req.user = {
-            id: decoded.id,
-            role: decoded.role
-        };
+        // Attach user full data to request
+        const User = require('../models/User');
+        req.user = await User.findById(decoded.id).select('-password');
+
+        if (!req.user) {
+            return res.status(401).json({ message: 'Not authorized, user missing' });
+        }
 
         next();
     } catch (error) {

@@ -43,7 +43,7 @@ const History = () => {
             {trips.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '4rem', background: 'rgba(255,255,255,0.02)', borderRadius: '20px' }}>
                     <p style={{ color: '#666', marginBottom: '1rem' }}>No trips planned yet.</p>
-                    <button className="neon-button">Start Planning</button>
+                    <button onClick={() => window.location.href = "/"} className="neon-button">Start Planning</button>
                 </div>
             ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>

@@ -32,7 +32,7 @@ const TripResults = ({ onRefine, history = [], plan }) => {
                 itinerary: tripData.itinerary?.map(day => ({
                     day: day.day,
                     title: "Day " + day.day,
-                    activities: day.activities?.map(a => a.time + ": " + a.activity) || []
+                    activities: day.activities?.map(a => typeof a === 'string' ? a : (a.time ? `${a.time}: ${a.activity}` : a.activity)) || []
                 })) || [],
                 costs: tripData.cost_breakdown || {}
             };
