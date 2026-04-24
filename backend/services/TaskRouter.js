@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const logEvent = require('../utils/logger');
+const { logEvent } = require('../utils/logger');
 
 class TaskRouter {
     constructor() {

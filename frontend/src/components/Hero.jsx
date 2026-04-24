@@ -59,7 +59,7 @@ const Hero = ({ onGenerateStart, onPlanGenerated }) => {
     const inputStyle = {
         width: '100%',
         padding: '0.8rem',
-        background: 'rgba(255,255,255,0.05)',
+        background: '#1e1e2f',
         border: '1px solid var(--glass-border)',
         borderRadius: '8px',
         color: '#fff',
